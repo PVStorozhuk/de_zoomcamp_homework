@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  pgdatabase:
+    image: postgres:13
+    container_name: pgdatabase
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+      - POSTGRES_DB=ny_taxi
+    volumes:
+      - "./ny_taxi_postgres_data:/var/lib/postgresql/data:rw"
+    ports:
+      - "5438:5432"
+    networks:
+      - pref_test  
+  pyth:
+    build: .
+    depends_on:
+      - pgdatabase
+    ports:
+      - "5439:5438"
+    networks:
+      - pref_test  
+
+networks:
+  pref_test:
+    name: pref_test
+    driver: bridge
